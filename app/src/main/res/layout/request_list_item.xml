@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/vaitomarnocu"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:paddingStart="10dp"
+    android:background="@drawable/group_expandable_style">
+
+    <TextView
+        android:id="@+id/mainInfoText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="OS: 444444 - Data: 03/12/2020 - Por: Augusto"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/subInfoText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Items: (10) Frota/C.C: Manutenção Automotiva"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/mainInfoText"
+        tools:layout_editor_absoluteY="1dp" />
+
+    <ImageView
+        android:id="@+id/theicon"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:layout_marginEnd="10dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/ic_057_minus" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
