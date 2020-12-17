@@ -19,7 +19,7 @@ class SearchActivity: AppCompatActivity(){
 
     override fun onResume() {
         super.onResume()
-        val retrofitClient = NetworkUtils.getRetrofitInstance(URL_PATH)
+        val retrofitClient = NetworkUtils.getRetrofitInstance()
         val endpoint = retrofitClient.create(RestApi::class.java)
         val callback = endpoint.getAllRequests()
         callback.enqueue(object : Callback<MutableList<ListModel?>>{

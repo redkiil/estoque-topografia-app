@@ -111,7 +111,7 @@ class RequestActivity : AppCompatActivity(){
             }
             Log.d("app", "I: $i - FirstIin: $first_value - SecondIn $second_value")
         }
-        val retrofitClient = NetworkUtils.getRetrofitInstance(URL_PATH)
+        val retrofitClient = NetworkUtils.getRetrofitInstance()
         val endpoint = retrofitClient.create(RestApi::class.java)
 
 

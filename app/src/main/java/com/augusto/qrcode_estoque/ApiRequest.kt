@@ -13,12 +13,13 @@ import java.time.LocalDate
 import java.time.LocalDateTime
 import java.util.*
 
+private const val URL_PATH = "http://10.0.2.2:3000"
 
 class NetworkUtils {
     companion object{
-        fun getRetrofitInstance(path: String): Retrofit{
+        fun getRetrofitInstance(): Retrofit{
             val gson = GsonBuilder().excludeFieldsWithoutExposeAnnotation().create()
-            return Retrofit.Builder().baseUrl(path).addConverterFactory(GsonConverterFactory.create()).build()
+            return Retrofit.Builder().baseUrl(URL_PATH).addConverterFactory(GsonConverterFactory.create()).build()
         }
     }
 }
@@ -35,7 +36,11 @@ data class ListModel(
     var date: Date = Date.from(Instant.now()),
     var itemsinfo: MutableList<Itemsinfo> = mutableListOf()
 ) : Serializable
-
+data class ListItem(
+    var code: Int,
+    var instock: Int,
+    var name: String?
+) : Serializable
 data class Item(
     var code: Int,
     var quant: Int
@@ -51,6 +56,8 @@ interface RestApi {
     fun addUser(@FieldMap asd: MutableMap<String, Any>): Call<ResponseBody>
     @GET("/api/requests")
     fun getAllRequests(): Call<MutableList<ListModel?>>
+    @GET("/api/item/{codeid}")
+    fun getItemInfo(@Path("codeid") code: Int): Call<ListItem>
 }
 
 /*

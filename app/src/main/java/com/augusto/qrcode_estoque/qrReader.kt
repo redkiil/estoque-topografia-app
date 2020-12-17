@@ -1,11 +1,15 @@
 package com.augusto.qrcode_estoque
 
 
+import android.content.Context
 import android.content.Intent
+import android.hardware.input.InputManager
 import android.os.Bundle
 import android.util.Log
 import android.util.SparseArray
 import android.view.SurfaceHolder
+import android.view.View
+import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.gms.vision.CameraSource
@@ -13,6 +17,9 @@ import com.google.android.gms.vision.Detector
 import com.google.android.gms.vision.barcode.Barcode
 import com.google.android.gms.vision.barcode.BarcodeDetector
 import kotlinx.android.synthetic.main.qr_reader.*
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 
 private val requestCodeReader = 1002;
@@ -26,6 +33,7 @@ class QrReader : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.qr_reader)
         searchButton.setOnClickListener {getDataByCode()}
+        buttonSend.setOnClickListener{finished()}
         Log.d("app", intent.extras.toString())
         idback = intent.extras?.getInt("field") ?: 0
         Log.d("app", "Received $idback")
@@ -33,16 +41,41 @@ class QrReader : AppCompatActivity() {
 
     private fun getDataByCode(){
         if(codeInput.text.isNotEmpty()){
-            Log.i("app", "htttpd get blalalalbla code"+ codeInput.text)
-            val intent = Intent()
-            intent.putExtra("returnfield", idback)
-            intent.putExtra("codeid", codeInput.text.toString())
-            setResult(requestCodeReader, intent)
-            finish()
+            progressBar.visibility = View.VISIBLE
+            val retrofitClient = NetworkUtils.getRetrofitInstance()
+            val endPoint = retrofitClient.create(RestApi::class.java)
+            val callback = endPoint.getItemInfo(Integer.parseInt(codeInput.text.toString()))
+            callback.enqueue(object: Callback<ListItem> {
+                override fun onResponse(call: Call<ListItem>, response: Response<ListItem>) {
+                    progressBar.visibility = View.INVISIBLE
+
+                    resultText.visibility = View.VISIBLE
+                  if(response.code() == 404){
+                      resultText.text = "Item não encontrado"
+                  }else {
+                      resultText.text = response.body()?.name.toString()
+                      buttonSend.visibility = View.VISIBLE
+                  }
+                }
+
+                override fun onFailure(call: Call<ListItem>, t: Throwable) {
+                    Toast.makeText(applicationContext, "Falha ao obter os dados ${t.message}", Toast.LENGTH_LONG).show()
+                }
+
+            })
+
 
         }
+        val hidekey = applicationContext.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        hidekey.hideSoftInputFromWindow(codeInput.windowToken, 0)
     }
-
+    private fun finished(){
+        val intent = Intent()
+        intent.putExtra("returnfield", idback)
+        intent.putExtra("codeid", codeInput.text.toString())
+        setResult(requestCodeReader, intent)
+        finish()
+    }
     private fun setupControls(){
         detector = BarcodeDetector.Builder(baseContext).setBarcodeFormats(Barcode.QR_CODE).build()
         cameraSource = CameraSource.Builder(baseContext, detector).setAutoFocusEnabled(true).build()
