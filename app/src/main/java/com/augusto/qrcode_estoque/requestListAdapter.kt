@@ -1,29 +1,26 @@
 package com.augusto.qrcode_estoque
 
-import android.app.Activity
 import android.content.Context
 import android.content.Intent
-import android.text.Html
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.*
-import androidx.constraintlayout.widget.ConstraintLayout
+import android.widget.BaseExpandableListAdapter
+import android.widget.ImageButton
+import android.widget.ImageView
+import android.widget.TextView
 import androidx.core.text.HtmlCompat
-import androidx.core.view.marginBottom
-import androidx.core.view.updateMargins
 import java.text.SimpleDateFormat
 import java.util.*
 
-class RequestListAdapter (var context: Context, var itemList: MutableList<ListModel>): BaseExpandableListAdapter() {
+class RequestListAdapter (private var context: Context, private var itemList: MutableList<ListModel>): BaseExpandableListAdapter() {
     init {
         itemList.forEach {
             it.items.add(Item(-1,-1))
         }
     }
     override fun getGroup(groupPosition: Int): Any {
-        return groupPosition;
+        return groupPosition
     }
 
     override fun isChildSelectable(groupPosition: Int, childPosition: Int): Boolean {
@@ -65,7 +62,7 @@ class RequestListAdapter (var context: Context, var itemList: MutableList<ListMo
             myIcon?.setImageResource(R.drawable.ic_067_plus)
             convertView?.setBackgroundResource(R.drawable.child_expandable_style)
         }
-        return convertView;
+        return convertView
     }
 
     override fun getChildrenCount(groupPosition: Int): Int {
@@ -87,7 +84,7 @@ class RequestListAdapter (var context: Context, var itemList: MutableList<ListMo
         convertView: View?,
         parent: ViewGroup?
     ): View? {
-        var convertView: View?
+        val convertView: View?
         if(itemList[groupPosition].items.size-1 == childPosition){
                 convertView = LayoutInflater.from(context).inflate(R.layout.request_list_item_edit, parent, false)
 

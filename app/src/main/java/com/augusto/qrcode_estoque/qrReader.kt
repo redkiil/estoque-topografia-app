@@ -1,9 +1,10 @@
 package com.augusto.qrcode_estoque
 
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
-import android.hardware.input.InputManager
+import android.content.pm.PackageManager
 import android.os.Bundle
 import android.util.Log
 import android.util.SparseArray
@@ -12,26 +13,34 @@ import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
+import androidx.core.text.HtmlCompat
 import com.google.android.gms.vision.CameraSource
 import com.google.android.gms.vision.Detector
 import com.google.android.gms.vision.barcode.Barcode
 import com.google.android.gms.vision.barcode.BarcodeDetector
 import kotlinx.android.synthetic.main.qr_reader.*
+import kotlinx.android.synthetic.main.settings.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
 
-private val requestCodeReader = 1002;
+private const val requestCodeReader = 1002
 
 class QrReader : AppCompatActivity() {
-    private lateinit var cameraSource: CameraSource;
-    private lateinit var detector: BarcodeDetector;
-    private var idback = 0;
+    private lateinit var cameraSource: CameraSource
+    private lateinit var detector: BarcodeDetector
+    private var idback = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.qr_reader)
+        if(ContextCompat.checkSelfPermission(this@QrReader, android.Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED){
+            Helper().askForCameraPermission(this@QrReader)
+        }else{
+            setupControls()
+        }
         searchButton.setOnClickListener {getDataByCode()}
         buttonSend.setOnClickListener{finished()}
         Log.d("app", intent.extras.toString())
@@ -48,13 +57,21 @@ class QrReader : AppCompatActivity() {
             callback.enqueue(object: Callback<ListItem> {
                 override fun onResponse(call: Call<ListItem>, response: Response<ListItem>) {
                     progressBar.visibility = View.INVISIBLE
-
                     resultText.visibility = View.VISIBLE
+
                   if(response.code() == 404){
                       resultText.text = "Item não encontrado"
                   }else {
-                      resultText.text = response.body()?.name.toString()
-                      buttonSend.visibility = View.VISIBLE
+                      try{
+                          val item = response.body()
+                          val text = "${item!!.name} <br> Em estoque: ${item!!.instock}"
+                          resultText.text = HtmlCompat.fromHtml(text,HtmlCompat.FROM_HTML_MODE_LEGACY)
+                          containerInfoItem.requestLayout()
+                          Log.d("app", item.toString())
+                          buttonSend.visibility = View.VISIBLE
+                      }catch (exception: Exception){
+                          Toast.makeText(applicationContext, "something went wrong with surface created", Toast.LENGTH_SHORT).show()
+                      }
                   }
                 }
 
@@ -92,6 +109,7 @@ class QrReader : AppCompatActivity() {
             cameraSource.stop()
         }
 
+        @SuppressLint("MissingPermission")
         override fun surfaceCreated(holder: SurfaceHolder?) {
             try{
                 cameraSource.start(holder)
@@ -110,7 +128,7 @@ class QrReader : AppCompatActivity() {
         override fun receiveDetections(detections: Detector.Detections<Barcode>?) {
             if(detections != null && detections.detectedItems.size()>0){
                 val qrCodes:SparseArray<Barcode> = detections.detectedItems
-                var code = qrCodes.valueAt(0)
+                val code = qrCodes.valueAt(0)
                 codeInput.setText(code.displayValue)
                 Log.i("app", code.displayValue)
             }else{

@@ -1,9 +1,6 @@
 package com.augusto.qrcode_estoque
 
-import android.content.Context
-import android.content.SharedPreferences
 import android.os.Bundle
-import android.os.PersistableBundle
 import android.view.Gravity
 import android.widget.Button
 import android.widget.EditText

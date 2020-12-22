@@ -9,11 +9,9 @@ import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.*
 import java.io.Serializable
 import java.time.Instant
-import java.time.LocalDate
-import java.time.LocalDateTime
 import java.util.*
 
-private const val URL_PATH = "http://10.0.2.2:3000"
+private const val URL_PATH = "http://192.168.1.2:3000"
 
 class NetworkUtils {
     companion object{
@@ -23,10 +21,7 @@ class NetworkUtils {
         }
     }
 }
-data class LoginModel(
-    @SerializedName("teste") var teste: String,
-    @SerializedName("teste2") var teste2: String
-)
+
 data class ListModel(
     var os: Int = -1,
     var protocol: Int = -1,
@@ -39,7 +34,7 @@ data class ListModel(
 data class ListItem(
     var code: Int,
     var instock: Int,
-    var name: String?
+    var name: String
 ) : Serializable
 data class Item(
     var code: Int,

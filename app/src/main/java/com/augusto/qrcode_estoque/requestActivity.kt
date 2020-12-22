@@ -17,26 +17,21 @@ import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import java.net.URL
-import java.time.Instant
-import java.util.*
-import kotlin.properties.Delegates
 
 
-private const val INITIAL_VALUE_LAYOUT_ID = 105;
-private const val URL_PATH = "http://10.0.2.2:3000"
-private const val requestCodeReader = 1002;
+private const val INITIAL_VALUE_LAYOUT_ID = 105
+private const val requestCodeReader = 1002
 
 
 
 class RequestActivity : AppCompatActivity(){
 
 
-    var size = 0;
-    var protocol = -1;
-    var username = ""
-    lateinit var container:LinearLayout;
-    lateinit var scroll:ScrollView;
+    private var size = 0
+    private var protocol = -1
+    private var username = ""
+    private lateinit var container:LinearLayout
+    private lateinit var scroll:ScrollView
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -48,7 +43,7 @@ class RequestActivity : AppCompatActivity(){
 
         val pref = applicationContext.getSharedPreferences("SETTINGS", Context.MODE_PRIVATE)
         val user = pref.getString("user", null)
-        username = user!!;
+        username = user!!
 
 
         if(intent.hasExtra("data")){
@@ -67,11 +62,11 @@ class RequestActivity : AppCompatActivity(){
     @RequiresApi(Build.VERSION_CODES.O)
     private fun addMoreFields(code: String = "", quant: String = ""){
         val inflater = getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
-        var mylist = inflater.inflate(R.layout.layout_item,null)
-        mylist.id = size + INITIAL_VALUE_LAYOUT_ID;
-        size++;
+        val mylist = inflater.inflate(R.layout.layout_item,null)
+        mylist.id = size + INITIAL_VALUE_LAYOUT_ID
+        size++
         mylist.findViewById<ImageButton>(R.id.searchButton).setOnClickListener{handleClick(mylist.id)}
-        if(!code.isNullOrBlank()){
+        if(!code.isBlank()){
             mylist.findViewById<EditText>(R.id.itemCode).setText(code)
             mylist.findViewById<EditText>(R.id.itemQuant).setText(quant)
         }
@@ -92,30 +87,30 @@ class RequestActivity : AppCompatActivity(){
     private fun sendData(){
         Log.d("app", "childs"+ container.childCount)
         val params = mutableMapOf<String,Any>()
-        params["protocol"] = protocol;
-        params["os"] = osField.text;
-        params["usedby"] = usedByField.text;
+        params["protocol"] = protocol
+        params["os"] = osField.text
+        params["usedby"] = usedByField.text
         params["retiredby"] = username
 
         for(i in INITIAL_VALUE_LAYOUT_ID..((INITIAL_VALUE_LAYOUT_ID-1)+container.childCount)){
-            var main_layout = findViewById<ConstraintLayout>(i!!)
-            var first_input = main_layout.getChildAt(2) as AppCompatEditText
-            var first_value = first_input.text
-            var second_input = main_layout.getChildAt(3) as AppCompatEditText
-            var second_value = second_input.text
-            if (first_value != null && second_value != null) {
-                if(first_value.isNotEmpty() && second_value.isNotEmpty()){
-                    params["items[][${(i-INITIAL_VALUE_LAYOUT_ID)}][code]"] = first_value;
-                    params["items[][${(i-INITIAL_VALUE_LAYOUT_ID)}][quant]"] = second_value;
+            val mainLayout = findViewById<ConstraintLayout>(i)
+            val firstInput = mainLayout.getChildAt(2) as AppCompatEditText
+            val firstValue = firstInput.text
+            val secondInput = mainLayout.getChildAt(3) as AppCompatEditText
+            val secondValue = secondInput.text
+            if (firstValue != null && secondValue != null) {
+                if(firstValue.isNotEmpty() && secondValue.isNotEmpty()){
+                    params["items[][${(i-INITIAL_VALUE_LAYOUT_ID)}][code]"] = firstValue
+                    params["items[][${(i-INITIAL_VALUE_LAYOUT_ID)}][quant]"] = secondValue
                 }
             }
-            Log.d("app", "I: $i - FirstIin: $first_value - SecondIn $second_value")
+            Log.d("app", "I: $i - FirstIin: $firstValue - SecondIn $secondValue")
         }
         val retrofitClient = NetworkUtils.getRetrofitInstance()
         val endpoint = retrofitClient.create(RestApi::class.java)
 
 
-        val callback = endpoint.addUser(params);
+        val callback = endpoint.addUser(params)
 
         callback.enqueue(object : Callback<ResponseBody>{
             override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
@@ -131,10 +126,10 @@ class RequestActivity : AppCompatActivity(){
 override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
  super.onActivityResult(requestCode, resultCode, data)
  if(resultCode == requestCodeReader){
-     var dt = data?.getIntExtra("returnfield",0)
-     var dt2 = data?.getStringExtra("codeid")
-     var dt4 = findViewById<ConstraintLayout>(dt!!)
-     var test = dt4.getChildAt(2) as AppCompatEditText
+     val dt = data?.getIntExtra("returnfield",0)
+     val dt2 = data?.getStringExtra("codeid")
+     val dt4 = findViewById<ConstraintLayout>(dt!!)
+     val test = dt4.getChildAt(2) as AppCompatEditText
      test.setText(dt2!!)
  }
 }

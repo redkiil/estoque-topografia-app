@@ -37,7 +37,8 @@
             android:textSize="16sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/osField"
-            app:layout_constraintTop_toBottomOf="@+id/usedby" />
+            app:layout_constraintTop_toBottomOf="@+id/usedby"
+            android:importantForAutofill="no" />
 
         <TextView
             android:id="@+id/usedby"
@@ -61,7 +62,8 @@
             android:textSize="16sp"
             app:layout_constraintEnd_toStartOf="@+id/guideline"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/osTextView" />
+            app:layout_constraintTop_toBottomOf="@+id/osTextView"
+            android:importantForAutofill="no" />
 
         <Button
             android:id="@+id/btnSend"
