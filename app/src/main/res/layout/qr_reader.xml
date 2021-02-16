@@ -10,7 +10,9 @@
     <SurfaceView
         android:id="@+id/cameraSurfaceView"
         android:layout_width="match_parent"
-        android:layout_height="480dp" />
+        android:layout_height="480dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <RelativeLayout
         android:id="@+id/containerInfoItem"

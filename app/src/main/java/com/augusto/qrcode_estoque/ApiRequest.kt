@@ -1,7 +1,6 @@
 package com.augusto.qrcode_estoque
 
 import com.google.gson.GsonBuilder
-import com.google.gson.annotations.SerializedName
 import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.Retrofit
@@ -11,7 +10,7 @@ import java.io.Serializable
 import java.time.Instant
 import java.util.*
 
-private const val URL_PATH = "http://192.168.1.2:3000"
+private const val URL_PATH = "http://topomachine.eastus.cloudapp.azure.com:3000"
 
 class NetworkUtils {
     companion object{
@@ -49,8 +48,8 @@ interface RestApi {
     @FormUrlEncoded
     @POST("/api/requests/new")
     fun addUser(@FieldMap asd: MutableMap<String, Any>): Call<ResponseBody>
-    @GET("/api/requests")
-    fun getAllRequests(): Call<MutableList<ListModel?>>
+    @GET("/api/requests/{from}/{to}")
+    fun getAllRequests(@Path("from") from: Long, @Path("to") to: Long): Call<MutableList<ListModel?>>
     @GET("/api/item/{codeid}")
     fun getItemInfo(@Path("codeid") code: Int): Call<ListItem>
 }

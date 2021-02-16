@@ -26,7 +26,6 @@
                 android:background="@drawable/bgr">
 
                 <TextView
-                    android:id="@+id/textViewRequest"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentBottom="true"
@@ -35,7 +34,6 @@
                     android:text="Nova Requisição" />
 
                 <ImageView
-                    android:id="@+id/imageViewRequest"
                     android:layout_width="wrap_content"
                     android:layout_height="100dp"
                     android:layout_centerHorizontal="true"
@@ -50,7 +48,6 @@
                 android:background="@drawable/bgr">
 
                 <TextView
-                    android:id="@+id/textViewSearch"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentBottom="true"
@@ -59,7 +56,6 @@
                     android:text="Consultar Requisição" />
 
                 <ImageView
-                    android:id="@+id/imageViewSearch"
                     android:layout_width="wrap_content"
                     android:layout_height="100dp"
                     android:layout_centerHorizontal="true"
@@ -82,7 +78,6 @@
                 android:background="@drawable/bgr">
 
                 <TextView
-                    android:id="@+id/textViewSettings"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentBottom="true"
@@ -91,7 +86,6 @@
                     android:text="Configurações" />
 
                 <ImageView
-                    android:id="@+id/imageViewSettings"
                     android:layout_width="wrap_content"
                     android:layout_height="100dp"
                     android:layout_centerHorizontal="true"
@@ -100,12 +94,5 @@
             </RelativeLayout>
         </TableRow>
 
-        <TableRow
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
-
-        <TableRow
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
     </TableLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
